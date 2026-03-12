@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦅 RAVR — Hyperlocal Cultural Radar
 
-## Getting Started
+RAVR is a premium, Gen-Z focused event discovery platform designed for the pulse of the city. Built with a "Spotify for real-world events" aesthetic, it combines high-impact typography with interactive map-based discovery to help users catch the vibe happening right now.
 
-First, run the development server:
+![RAVR Interface](https://github.com/ShashwatSahu21/RAVR-/raw/main/public/preview.png) *(Placeholder: Add your actual screenshot here)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Stack & Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework**: `Next.js 16.1.6` (App Router) + `React 19`
+- **Styling**: `Tailwind CSS` for a dark-mode, premium party aesthetic.
+- **Animations**: `Framer Motion` for smooth transitions and interactive UI elements.
+- **Maps**: `Leaflet` with custom dark-mode tiles and glowing markers.
+- **Database**: `Supabase` for real-time event synchronization.
+- **Typography**: `Bebas Neue`, `Syne`, and `DM Mono` for a distinct high-contrast feel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Key Highlights
+- **Live City Radar**: Interactive map centered on **Bangalore (Bengaluru)** featuring real-time event clusters.
+- **Vibe Match**: Each event features a "Vibe Score" and attendance tracking.
+- **Interactive UI**: Sliding magnetic Navbar, global custom trail cursor, and dynamic heatmap backgrounds.
+- **Responsive Design**: Optimized for both high-end laptops and mobile party-goers.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Getting Started
 
-## Learn More
+### Prerequisites
+- Node.js 18+ 
+- NPM / PNPM
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ShashwatSahu21/RAVR-.git
+   cd ravr
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Install dependencies:
+   ```bash
+   npm install --force
+   ```
 
-## Deploy on Vercel
+3. Configure Environment:
+   Create a `.env.local` file with your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🗺️ Current Focus: Bangalore
+The platform is currently localized to **Bangalore**, tracking underground raves in Indiranagar, rooftop sessions in Koramangala, and community runs in Cubbon Park.
+
+---
+*Built with ❤️ for the city by [Shashwat Sahu](https://github.com/ShashwatSahu21)*
