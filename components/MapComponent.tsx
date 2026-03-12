@@ -1,9 +1,9 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Event } from '../lib/supabase';
-import { useEffect } from 'react';
+import { cn } from '../lib/utils';
 import L from 'leaflet';
 
 // Create glowing icon
@@ -11,38 +11,37 @@ const createGlowIcon = (color: string) => {
   return L.divIcon({
     className: 'custom-icon',
     html: `
-      <div class="relative w-6 h-6 flex items-center justify-center pointer-events-none">
-        <div class="absolute w-full h-full rounded-full opacity-50 animate-glow pointer-events-none" style="background-color: ${color};"></div>
-        <div class="relative w-3 h-3 rounded-full pointer-events-none" style="background-color: ${color}; box-shadow: 0 0 10px ${color}, 0 0 20px ${color};"></div>
+      <div class="relative w-8 h-8 flex items-center justify-center pointer-events-none">
+        <div class="absolute w-full h-full rounded-full opacity-30 animate-pulse pointer-events-none" style="background-color: ${color};"></div>
+        <div class="relative w-3.5 h-3.5 rounded-full pointer-events-none" style="background-color: ${color}; box-shadow: 0 0 15px ${color}, 0 0 30px ${color}; border: 2px solid white;"></div>
       </div>
     `,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
-    popupAnchor: [0, -12],
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16],
   });
 };
 
 const vibeColors: Record<string, string> = {
-  chill: '#10b981',       // green
-  active: '#f97316',      // orange
-  trending: '#ec4899',    // pink
-  underground: '#8b5cf6'  // purple
+  chill: '#00F5C4',       // teal
+  active: '#FFE03D',      // yellow
+  trending: '#FF3D5A',    // coral
+  underground: '#9B5DE5'  // purple
 };
 
 
 export default function MapComponent({ events, onEventClick }: { events: Event[], onEventClick?: (e: Event) => void }) {
-  const defaultCenter: [number, number] = [40.7128, -74.0060]; // NYC
+  const defaultCenter: [number, number] = [12.9716, 77.5946]; // Bangalore
   
   return (
-    <div className="w-full h-full w-full relative z-0">
+    <div className="w-full h-full relative z-0">
       <MapContainer 
         center={defaultCenter} 
         zoom={13} 
         scrollWheelZoom={true} 
-        style={{ height: '100%', width: '100%', background: '#0a0a0a' }}
+        style={{ height: '100%', width: '100%', background: '#050507' }}
         zoomControl={false}
       >
-        {/* Dark theme tiles without labels (or dark matter) */}
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -58,13 +57,15 @@ export default function MapComponent({ events, onEventClick }: { events: Event[]
             }}
           >
             {!onEventClick && (
-              <Popup className="glass-popup">
-                <div className="p-1 min-w-[150px]">
-                  <h3 className="font-bold text-white mb-1">{event.title}</h3>
-                  <p className="text-xs text-gray-300 mb-2">{event.category.toUpperCase()}</p>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-ravr-pink font-bold">{event.vibe_score} Vibe</span>
-                    <span className="text-gray-400">{event.attendance} RSVP</span>
+              <Popup className="premium-popup">
+                <div className="p-2 min-w-[180px] bg-ravr-grey rounded-lg border border-white/5">
+                  <div className="text-[0.6rem] uppercase tracking-[0.2em] font-bold mb-1 opacity-60" style={{ color: vibeColors[event.category] }}>
+                    {event.category}
+                  </div>
+                  <h3 className="font-syne font-bold text-white text-base mb-3 leading-tight">{event.title}</h3>
+                  <div className="flex justify-between items-center text-[0.65rem] font-mono border-t border-white/5 pt-2">
+                    <span className="text-ravr-coral font-bold uppercase">{event.vibe_score} Vibe</span>
+                    <span className="text-muted-foreground">{event.attendance} RSVP</span>
                   </div>
                 </div>
               </Popup>
@@ -75,3 +76,4 @@ export default function MapComponent({ events, onEventClick }: { events: Event[]
     </div>
   );
 }
+

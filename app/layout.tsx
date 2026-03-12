@@ -1,13 +1,29 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Syne, Bebas_Neue, DM_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import CustomCursor from '@/components/CustomCursor'
 
-const inter = Inter({ subsets: ['latin'] })
+const syne = Syne({ 
+  subsets: ['latin'],
+  variable: '--font-syne',
+})
+
+const bebasNeue = Bebas_Neue({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-bebas',
+})
+
+const dmMono = DM_Mono({
+  weight: ['300', '400', '500'],
+  subsets: ['latin'],
+  variable: '--font-mono',
+})
 
 export const metadata: Metadata = {
-  title: 'RAVR - Don\'t Miss the Moment',
-  description: 'Gen-Z hyperlocal event discovery platform.',
+  title: 'RAVR — Don\'t Miss The Moment',
+  description: 'A real-time cultural radar for your city. See what\'s actually happening around you — right now.',
   icons: {
     icon: '/favicon.ico',
   },
@@ -19,13 +35,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-ravr-black text-white min-h-screen flex flex-col`}>
+    <html lang="en" className={`${syne.variable} ${bebasNeue.variable} ${dmMono.variable} scroll-smooth`}>
+      <body className="bg-background text-foreground min-h-screen grain-overlay font-mono selection:bg-ravr-coral selection:text-white">
+        <CustomCursor />
         <Navbar />
-        <main className="flex-1 overflow-x-hidden pt-16">
+        <main className="relative z-10">
           {children}
         </main>
       </body>
     </html>
   )
 }
+
+

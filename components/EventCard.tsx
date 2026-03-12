@@ -16,15 +16,15 @@ interface EventCardProps {
 export default function EventCard({ event, onClick, featured = false }: EventCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Vibe colors
+  // Vibe colors mapping
   const vibeColors: Record<string, string> = {
-    chill: 'from-ravr-chill/30 to-ravr-chill/5 text-ravr-chill border-ravr-chill/30',
-    active: 'from-ravr-active/30 to-ravr-active/5 text-ravr-active border-ravr-active/30',
-    trending: 'from-ravr-trending/30 to-ravr-trending/5 text-ravr-trending border-ravr-trending/30',
-    underground: 'from-ravr-underground/30 to-ravr-underground/5 text-ravr-underground border-ravr-underground/30',
+    chill: 'text-ravr-teal',
+    active: 'text-ravr-yellow',
+    trending: 'text-ravr-coral',
+    underground: 'text-ravr-purple',
   };
 
-  const currentVibe = vibeColors[event.category] || vibeColors.trending;
+  const currentVibeColor = vibeColors[event.category] || vibeColors.trending;
   
   // Format the date
   const eventDate = new Date(event.date);
@@ -32,70 +32,86 @@ export default function EventCard({ event, onClick, featured = false }: EventCar
 
   return (
     <motion.div
-      whileHover={{ y: -5, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-2xl glass border p-5 cursor-pointer flex flex-col gap-4 group transition-all duration-300",
-        currentVibe,
-        featured ? "col-span-1 md:col-span-2 shadow-lg shadow-ravr-purple/10 border-white/20" : "shadow-md hover:shadow-xl hover:shadow-white/5"
+        "group relative bg-ravr-grey border border-white/[0.05] rounded-xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500",
+        featured ? "md:col-span-2 lg:col-span-2 shadow-black/40" : "shadow-black/20"
       )}
     >
-      {/* Glow Effect */}
+      {/* Visual Header / Image Placeholder */}
       <div className={cn(
-        "absolute -inset-1 opacity-0 group-hover:opacity-100 blur-xl transition duration-500",
-        event.category === 'chill' && "bg-ravr-chill/10",
-        event.category === 'active' && "bg-ravr-active/10",
-        event.category === 'trending' && "bg-ravr-trending/10",
-        event.category === 'underground' && "bg-ravr-underground/10"
-      )} />
-
-      {/* Header */}
-      <div className="relative z-10 flex justify-between items-start">
-        <div className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-wider font-semibold opacity-80">
-            {event.category}
-          </span>
-          <h3 className={cn("font-bold text-white", featured ? "text-2xl" : "text-xl")}>
-            {event.title}
-          </h3>
-        </div>
-        <div className="flex flex-col items-center justify-center w-12 h-12 rounded-full glass border border-white/10 shrink-0">
-          <span className="text-lg font-bold text-white">{event.vibe_score}</span>
-          <span className="text-[10px] text-gray-400 -mt-1">Vibe</span>
+        "relative overflow-hidden aspect-video w-full",
+        featured ? "aspect-[21/9]" : "aspect-video"
+      )}>
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 group-hover:scale-110",
+          event.category === 'chill' && "from-[#001a14] to-ravr-teal",
+          event.category === 'active' && "from-[#1a1000] to-ravr-yellow",
+          event.category === 'trending' && "from-[#1a0005] to-ravr-coral",
+          event.category === 'underground' && "from-[#0d001a] to-ravr-purple"
+        )} />
+        
+        {/* Glow Overlay */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ravr-grey to-transparent z-10" />
+        
+        {/* Category Badge */}
+        <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+           <span className={cn(
+             "px-3 py-1 rounded-full text-[0.6rem] font-bold tracking-[0.2em] uppercase border backdrop-blur-md",
+             event.category === 'chill' && "border-ravr-teal/30 text-ravr-teal bg-ravr-teal/10",
+             event.category === 'active' && "border-ravr-yellow/30 text-ravr-yellow bg-ravr-yellow/10",
+             event.category === 'trending' && "border-ravr-coral/30 text-ravr-coral bg-ravr-coral/10",
+             event.category === 'underground' && "border-ravr-purple/30 text-ravr-purple bg-ravr-purple/10"
+           )}>
+             {event.category}
+           </span>
         </div>
       </div>
 
-      {/* Details */}
-      <div className="relative z-10 mt-auto flex flex-col gap-3">
-        <p className="text-sm text-gray-300 line-clamp-2">
+      {/* Body */}
+      <div className="p-6 relative z-10 -mt-10">
+        <div className="flex justify-between items-start gap-4 mb-3">
+          <h3 className={cn(
+            "font-syne font-extrabold text-white leading-tight transition-colors group-hover:text-ravr-coral",
+            featured ? "text-3xl" : "text-xl"
+          )}>
+            {event.title}
+          </h3>
+          <div className="shrink-0 w-12 h-12 flex items-center justify-center border border-white/10 rounded-full glass">
+            <span className={cn("font-bebas text-lg", currentVibeColor)}>{event.vibe_score}</span>
+          </div>
+        </div>
+
+        <p className="text-sm text-muted-foreground line-clamp-2 mb-6 font-medium leading-relaxed">
           {event.description}
         </p>
 
-        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mt-2">
-          <div className="flex items-center gap-1">
-            <Calendar className="w-4 h-4" />
-            <span>{formattedDate}</span>
+        {/* Footer Meta */}
+        <div className="pt-5 border-t border-white/[0.05] flex flex-wrap justify-between items-center gap-4">
+          <div className="flex items-center gap-5 text-[0.65rem] tracking-wider text-muted-foreground font-mono uppercase">
+            <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{formattedDate}</span>
+            <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" />{event.attendance}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
-            <span>{event.attendance} RSVP</span>
+          <div className={cn(
+            "flex items-center gap-1 text-[0.65rem] font-bold tracking-widest uppercase transition-all duration-300",
+            isHovered ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
+          )}>
+            Details <ChevronRight className="w-4 h-4" />
           </div>
         </div>
       </div>
 
-      {/* Arrow Indicator */}
-      <div className={cn(
-        "absolute bottom-4 right-4 text-white/50 transition-all duration-300 transform",
-        isHovered ? "translate-x-0 opacity-100 text-white" : "-translate-x-4 opacity-0"
-      )}>
-        <ChevronRight className="w-5 h-5" />
-      </div>
-
-      {/* Background Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+      {/* Hover Highlight Line */}
+      <motion.div 
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: isHovered ? 1 : 0 }}
+        className={cn("absolute bottom-0 left-0 right-0 h-1 origin-left", currentVibeColor.replace('text-', 'bg-'))}
+      />
     </motion.div>
   );
 }
+

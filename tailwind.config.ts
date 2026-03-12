@@ -18,6 +18,11 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        syne: ["var(--font-syne)", "sans-serif"],
+        bebas: ["var(--font-bebas)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -55,14 +60,16 @@ const config = {
         
         // RAVR Custom Colors
         ravr: {
-          purple: "#9b51e0",
-          pink: "#ff0080",
-          black: "#121212",
-          gray: "#282828",
-          chill: "#10b981",       // green
-          active: "#f97316",      // orange
-          trending: "#ec4899",    // pink
-          underground: "#8b5cf6"  // purple
+          purple: "#9B5DE5",
+          coral: "#FF3D5A",
+          yellow: "#FFE03D",
+          teal: "#00F5C4",
+          black: "#050507",
+          grey: "#1A1A24",
+          chill: "#10b981",
+          active: "#f97316",
+          trending: "#ec4899",
+          underground: "#8b5cf6"
         }
       },
       borderRadius: {
@@ -95,3 +102,4 @@ const config = {
 } satisfies Config
 
 export default config
+
