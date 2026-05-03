@@ -131,6 +131,36 @@
 /* ── CUSTOM CURSOR ── */
 .custom-cursor {
   mix-blend-mode: difference;
+  box-shadow: 0 0 20px theme('colors.ravr.coral'), 0 0 40px theme('colors.ravr.coral');
+}
+
+/* Noise / Film Grain Overlay */
+.noise-overlay {
+  position: fixed;
+  inset: -200%;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  animation: noise 0.5s steps(2) infinite;
+}
+
+@keyframes noise {
+  0% { transform: translate(0,0) }
+  10% { transform: translate(-5%,-5%) }
+  20% { transform: translate(-10%,5%) }
+  30% { transform: translate(5%,-10%) }
+  40% { transform: translate(-5%,15%) }
+  50% { transform: translate(-10%,5%) }
+  60% { transform: translate(15%,0) }
+  70% { transform: translate(0,10%) }
+  80% { transform: translate(-15%,0) }
+  90% { transform: translate(10%,5%) }
+  100% { transform: translate(5%,0) }
+}
+
+.perspective-1000 {
+  perspective: 1000px;
 }
 
 /* ── Leaflet Overrides ── */
@@ -148,5 +178,3 @@
 .leaflet-popup-tip-container {
   display: none;
 }
-
-

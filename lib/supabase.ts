@@ -17,42 +17,46 @@ export type Event = {
   date: string
   vibe_score: number
   attendance: number
+  image_url?: string
 }
 
 // Fallback mock data when Supabase is not connected
 export const mockEvents: Event[] = [
   {
     id: "1",
-    title: "Indiranagar Underground Rave",
-    description: "Warehouse techno and house music in the heart of Indiranagar.",
+    title: "Midnight Frequencies",
+    description: "The ultimate underground techno session. High-end sounds, low-end frequencies.",
     category: "underground",
     latitude: 12.9784,
     longitude: 77.6408,
     date: new Date(Date.now() + 86400000).toISOString(),
-    vibe_score: 95,
-    attendance: 400
+    vibe_score: 98,
+    attendance: 400,
+    image_url: "/techno_party_vibe_1_1773324322303.png"
   },
   {
     id: "2",
-    title: "Koramangala Jazz Session",
-    description: "Relaxing live jazz and lo-fi beats at a rooftop lounge.",
-    category: "chill",
+    title: "Brick Lane Sypher",
+    description: "Exclusive urban pop-up featuring street art, music, and the best of city culture.",
+    category: "trending",
     latitude: 12.9352,
     longitude: 77.6245,
     date: new Date(Date.now() + 172800000).toISOString(),
-    vibe_score: 82,
-    attendance: 120
+    vibe_score: 92,
+    attendance: 250,
+    image_url: "/brick_lane_vibe_1_1773324403736.png"
   },
   {
     id: "3",
-    title: "MG Road Pop-up Drop",
-    description: "Exclusive sneaker release and streetwear market at MG Road.",
-    category: "trending",
+    title: "SYPHER: Red Room",
+    description: "Minimalist clubbing experience. Deep beats and sharp visuals in the Red Room.",
+    category: "underground",
     latitude: 12.9745,
     longitude: 77.6006,
     date: new Date(Date.now() + 3600000).toISOString(),
     vibe_score: 88,
-    attendance: 250
+    attendance: 180,
+    image_url: "/sypher_vibe_1_1773324459982.png"
   },
   {
     id: "4",

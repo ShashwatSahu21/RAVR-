@@ -2,7 +2,7 @@
 
 RAVR is a premium, Gen-Z focused event discovery platform designed for the pulse of the city. Built with a "Spotify for real-world events" aesthetic, it combines high-impact typography with interactive map-based discovery to help users catch the vibe happening right now.
 
-![RAVR Interface](https://github.com/ShashwatSahu21/RAVR-/raw/main/public/preview.png) *(Placeholder: Add your actual screenshot here)*
+![RAVR Interface](./public/preview.png) 
 
 ## 🚀 Stack & Features
 
@@ -52,6 +52,23 @@ RAVR is a premium, Gen-Z focused event discovery platform designed for the pulse
 
 ## 🗺️ Current Focus: Bangalore
 The platform is currently localized to **Bangalore**, tracking underground raves in Indiranagar, rooftop sessions in Koramangala, and community runs in Cubbon Park.
+
+## 🛠️ Technical Roadmap
+
+### Phase 1: Vibe Engine (Current)
+- [x] Three.js interactive landing page.
+- [x] Responsive layout for event discovery.
+- [x] Basic Supabase integration for event data.
+
+### Phase 2: Live Interaction (Next)
+- [ ] Real-time "Heatmap" showing crowd density at popular spots.
+- [ ] User authentication and personalized "Vibe Mix."
+- [ ] Community-driven event submissions with verification.
+
+### Phase 3: Expansion & API
+- [ ] WebSocket integration for live attendance count.
+- [ ] Public RAVR API for local businesses and promoters.
+- [ ] Cross-city support beginning with Mumbai and Delhi.
 
 ---
 *Built with ❤️ for the city by [Shashwat Sahu](https://github.com/ShashwatSahu21)*

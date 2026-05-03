@@ -1,10 +1,16 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Zap, Map as MapIcon, Calendar, ArrowUpRight } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Zap, Map as MapIcon, Calendar, ArrowUpRight, Activity, TrendingUp, Radio } from 'lucide-react';
 import Link from 'next/link';
-import HeatmapBackground from '@/components/HeatmapBackground';
+import dynamic from 'next/dynamic';
 import Marquee from '@/components/Marquee';
+import { useRef, useEffect, useState } from 'react';
+import { mockEvents } from '@/lib/supabase';
+import EventCard from '@/components/EventCard';
+
+// Dynamically import Three.js scene to avoid SSR issues
+const VibeScene = dynamic(() => import('@/components/VibeScene'), { ssr: false });
 
 const Reveal = ({ children }: { children: React.ReactNode }) => (
   <motion.div
@@ -18,15 +24,28 @@ const Reveal = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Home() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div ref={containerRef} className="relative min-h-screen overflow-x-hidden">
       
       {/* ── HERO SECTION ── */}
-      <section className="relative min-h-screen flex items-center px-6 sm:px-10 overflow-hidden">
-        <HeatmapBackground />
+      <section className="relative h-screen flex items-center px-6 sm:px-10 overflow-hidden">
+        {/* Three.js Interactive Background */}
+        <VibeScene />
         
-        <div className="relative z-10 max-w-6xl w-full pt-20">
+        <div className="relative z-10 max-w-7xl w-full pt-20">
           <motion.div
+            style={{ opacity }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
@@ -36,56 +55,75 @@ export default function Home() {
             Live in Bangalore · Now Trending
           </motion.div>
 
-          <h1 className="font-bebas text-[clamp(4.5rem,16vw,16rem)] leading-[0.82] select-none">
-            <motion.span 
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 1 }}
-              className="block"
-            >
-              CATCH
-            </motion.span>
-            <motion.span 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 1 }}
-              className="block text-stroke-coral text-transparent"
-            >
-              THE VIBE
-            </motion.span>
-          </h1>
+          <div className="relative">
+            <h1 className="font-bebas text-[clamp(4.8rem,18vw,18rem)] leading-[0.8] select-none perspective-1000 tracking-[-0.03em]">
+              <motion.span 
+                style={{ y: y2, opacity }}
+                className="block mb-4"
+              >
+                CATCH
+              </motion.span>
+              <motion.span 
+                style={{ y: y1, opacity }}
+                className="block text-stroke-coral text-transparent relative group drop-shadow-[0_0_40px_rgba(255,61,90,0.2)]"
+              >
+                THE VIBE
+                <span className="absolute inset-0 text-ravr-coral opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-700 animate-pulse">THE VIBE</span>
+              </motion.span>
+            </h1>
+            
+            {/* Decal Background Text */}
+            <div className="absolute -top-10 -left-10 text-[20rem] font-bebas text-white/[0.02] -z-10 select-none hidden lg:block uppercase">
+              RAVR
+            </div>
+          </div>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mt-4">
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="text-white/60 text-sm sm:text-base leading-relaxed max-w-sm font-medium"
-            >
-              A real-time cultural radar for the city. From secret warehouse sets to rooftop jazz, see what&apos;s actually happening right now.
-            </motion.p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mt-10">
+            <motion.div style={{ opacity }}>
+              <p className="text-white/60 text-sm sm:text-lg leading-relaxed max-w-sm font-medium mb-8">
+                The city&apos;s heartbeat, visualized. Locate the energy, skip the line, and own the night. No placeholders, just pure vibe.
+              </p>
+              
+              {/* Gen-Z Metrics Bar */}
+              <div className="flex gap-8 items-center border-t border-white/5 pt-8">
+                {[
+                  { label: 'ENERGY', value: '4.8kW', icon: <Radio className="w-3 h-3" /> },
+                  { label: 'MOOD', value: 'TECHNO', icon: <Activity className="w-3 h-3" /> },
+                  { label: 'TREND', value: '+24%', icon: <TrendingUp className="w-3 h-3" /> }
+                ].map((stat, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    <span className="text-[0.55rem] tracking-[0.2em] text-muted-foreground font-bold flex items-center gap-1.5">
+                      {stat.icon} {stat.label}
+                    </span>
+                    <span className="text-xl font-bebas text-white">{stat.value}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
+              style={{ opacity, scale }}
               className="flex items-center gap-4"
             >
-              <Link href="/events" className="group relative bg-white text-black font-bebas text-2xl px-10 py-5 rounded-full transition-all hover:bg-ravr-coral hover:text-white hover:-translate-y-2 overflow-hidden">
-                <span className="relative z-10 flex items-center gap-3">
-                   Explore Tonight <ArrowUpRight className="w-6 h-6" />
+              <Link href="/events" className="group relative bg-white text-black font-bebas text-3xl px-12 py-6 rounded-2xl transition-all hover:bg-ravr-coral hover:text-white hover:-translate-y-2 overflow-hidden shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+                <span className="relative z-10 flex items-center gap-4">
+                   Explore Tonight <ArrowUpRight className="w-8 h-8" />
                 </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-ravr-coral to-ravr-purple opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
             </motion.div>
           </div>
         </div>
 
-        {/* Floating Decals */}
+        {/* Scroll Hint */}
         <motion.div 
-          animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[20%] right-[10%] w-64 h-64 border border-white/5 rounded-full opacity-20 pointer-events-none"
-        />
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30"
+        >
+          <span className="text-[0.6rem] tracking-[0.4em] uppercase font-bold">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+        </motion.div>
       </section>
 
       {/* ── MARQUEE ── */}
@@ -106,30 +144,9 @@ export default function Home() {
         </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {[
-            { tag: 'Nightlife', title: 'Midnight Frequencies', vibe: 94, loc: 'Subterranean', time: '10PM', color: 'from-[#1a0030] to-ravr-purple' },
-            { tag: 'Underground', title: 'Brick Lane Cypher', vibe: 89, loc: 'The Vault', time: '11PM', color: 'from-[#001a14] to-ravr-teal' },
-            { tag: 'Tech', title: 'Hacker House Pop-up', vibe: 82, loc: 'Wired Studios', time: 'Now', color: 'from-[#1a1000] to-ravr-yellow' }
-          ].map((card, i) => (
-            <Reveal key={i}>
-              <div className="group cursor-pointer">
-                <div className={`aspect-[4/5] bg-gradient-to-br ${card.color} rounded-3xl overflow-hidden relative mb-6 shadow-2xl transition-transform duration-500 group-hover:-translate-y-4`}>
-                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-                   <div className="absolute top-6 left-6 glass px-4 py-2 rounded-full text-[0.6rem] font-bold tracking-widest uppercase">
-                     {card.tag}
-                   </div>
-                   <div className="absolute bottom-8 left-8 right-8">
-                     <h3 className="font-syne font-extrabold text-2xl text-white mb-2 leading-tight">{card.title}</h3>
-                     <div className="flex items-center gap-4 text-[0.65rem] text-white/60 font-mono uppercase">
-                        <span>{card.loc}</span>
-                        <span>{card.time}</span>
-                     </div>
-                   </div>
-                   <div className="absolute bottom-8 right-8 w-12 h-12 rounded-full glass border border-white/10 flex items-center justify-center font-bebas text-lg text-ravr-coral shadow-2xl">
-                     {card.vibe}
-                   </div>
-                </div>
-              </div>
+          {mockEvents.slice(0, 3).map((event, i) => (
+            <Reveal key={event.id}>
+              <EventCard event={event} featured={i === 0} />
             </Reveal>
           ))}
         </div>

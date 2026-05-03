@@ -42,21 +42,29 @@ export default function EventCard({ event, onClick, featured = false }: EventCar
         featured ? "md:col-span-2 lg:col-span-2 shadow-black/40" : "shadow-black/20"
       )}
     >
-      {/* Visual Header / Image Placeholder */}
+      {/* Visual Header / Image */}
       <div className={cn(
-        "relative overflow-hidden aspect-video w-full",
+        "relative overflow-hidden w-full bg-ravr-black",
         featured ? "aspect-[21/9]" : "aspect-video"
       )}>
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 group-hover:scale-110",
-          event.category === 'chill' && "from-[#001a14] to-ravr-teal",
-          event.category === 'active' && "from-[#1a1000] to-ravr-yellow",
-          event.category === 'trending' && "from-[#1a0005] to-ravr-coral",
-          event.category === 'underground' && "from-[#0d001a] to-ravr-purple"
-        )} />
+        {event.image_url ? (
+          <motion.img 
+            src={event.image_url}
+            alt={event.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div className={cn(
+            "absolute inset-0 bg-gradient-to-br transition-transform duration-700 group-hover:scale-110",
+            event.category === 'chill' && "from-[#001a14] to-ravr-teal",
+            event.category === 'active' && "from-[#1a1000] to-ravr-yellow",
+            event.category === 'trending' && "from-[#1a0005] to-ravr-coral",
+            event.category === 'underground' && "from-[#0d001a] to-ravr-purple"
+          )} />
+        )}
         
         {/* Glow Overlay */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ravr-grey to-transparent z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ravr-grey via-ravr-grey/40 to-transparent z-10" />
         
         {/* Category Badge */}
         <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
